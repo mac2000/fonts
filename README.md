@@ -1,4 +1,4 @@
-fonts
+Fonts
 =====
 
 Online tool to calculate font sizes in different metrics
