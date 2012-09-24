@@ -3,66 +3,73 @@
 <head>
     <meta charset='UTF-8'>
     <title>Font sizes</title>
-    <link href="//current.bootstrapcdn.com/bootstrap-v204/css/bootstrap-combined.min.css" rel="stylesheet">
-    <style>.container-fluid {padding:1em;}</style>
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/latest/css/bootstrap.min.css" rel="stylesheet">
+    <style>.container-fluid {
+        padding: 1em;
+    }</style>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row-fluid">
-            <select class="span12" data-bind="options: opt, value: px"></select>
-        </div>
-        <div class="row-fluid">
-            <div class="span6"><pre data-bind="text: ems"></pre></div>
-            <div class="span6"><pre data-bind="text: percents"></pre></div>
-        </div>
-        <a class="btn" href="https://github.com/mac2000/fonts">Fork me on GitHub</a>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <label fot="font">Select desired(default) font size:</label>
+        <select name="font" class="span12" data-bind="options: opt, value: px"></select>
     </div>
-    <script src="http://cloud.github.com/downloads/SteveSanderson/knockout/knockout-2.1.0.js"></script>
-    <script>
-        var min = 6;
-        var max = 42;
-        var def = 16;
-        var options = [];
+    <div class="row-fluid">
+        <div class="span6">
+            <pre data-bind="text: ems"></pre>
+        </div>
+        <div class="span6">
+            <pre data-bind="text: percents"></pre>
+        </div>
+    </div>
+    <a class="btn" href="https://github.com/mac2000/fonts">Fork me on GitHub</a>
+</div>
+<script src="http://cloud.github.com/downloads/SteveSanderson/knockout/knockout-2.1.0.js"></script>
+<script>
+    var min = 6;
+    var max = 42;
+    var def = 16;
+    var options = [];
 
-        for(var i = min; i <= max; i++) options.push(i);
+    for (var i = min; i <= max; i++) options.push(i);
 
-        function px2em(target, base) {
-            base = base || def;
-            return parseFloat((target / base).toFixed(3));
-        }
+    function px2em(target, base) {
+        base = base || def;
+        return parseFloat((target / base).toFixed(3));
+    }
 
-        function px2pct(target, base) {
-            return parseFloat((100 * px2em(target, base)).toFixed(3));
-        }
+    function px2pct(target, base) {
+        return parseFloat((100 * px2em(target, base)).toFixed(3));
+    }
 
-        function ViewModel() {
-            var self = this;
+    function ViewModel() {
+        var self = this;
 
-            self.px = ko.observable(def);
-            self.opt = ko.observableArray(options);
+        self.px = ko.observable(def);
+        self.opt = ko.observableArray(options);
 
-            self.cycle = function(func) {
-                var px = parseInt(self.px());
-                var ending = func == px2em ? 'em' : '%';
-                var styles = ['html {font-size:' + func(px , def) + ending +'}', ''];
+        self.cycle = function (func) {
+            var px = parseInt(self.px());
+            var ending = func == px2em ? 'em' : '%';
+            var styles = ['html {font-size:' + func(px, def) + ending + '}', ''];
 
-                for(var i = min; i <= max; i++) {
-                    styles.push('.fs' + i + ' {font-size:' + func(i, px) + ending + '}');
-                }
-
-                return styles.join("\n");
+            for (var i = min; i <= max; i++) {
+                styles.push('.fs' + i + ' {font-size:' + func(i, px) + ending + '}');
             }
 
-            self.ems = ko.computed(function(){
-                return self.cycle(px2em);
-            });
+            return styles.join("\n");
+        };
 
-            self.percents = ko.computed(function(){
-                return self.cycle(px2pct);
-            });
-        }
+        self.ems = ko.computed(function () {
+            return self.cycle(px2em);
+        });
 
-        ko.applyBindings(new ViewModel());
-    </script>
+        self.percents = ko.computed(function () {
+            return self.cycle(px2pct);
+        });
+    }
+
+    ko.applyBindings(new ViewModel());
+</script>
 </body>
 </html>
